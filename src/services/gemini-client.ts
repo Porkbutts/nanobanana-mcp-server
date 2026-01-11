@@ -1,12 +1,28 @@
 import axios, { AxiosError } from "axios";
+import { readFile } from "fs/promises";
+import { extname } from "path";
 import { API_BASE_URL, API_TIMEOUT } from "../constants.js";
 import type {
   GeminiRequest,
   GeminiResponse,
-  GeminiContent,
   ImageGenerationResult,
   GeneratedImage
 } from "../types.js";
+
+/**
+ * Get MIME type from file extension
+ */
+function getMimeTypeFromPath(filePath: string): string {
+  const ext = extname(filePath).toLowerCase();
+  const mimeTypes: Record<string, string> = {
+    ".png": "image/png",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".webp": "image/webp",
+    ".gif": "image/gif"
+  };
+  return mimeTypes[ext] || "image/png";
+}
 
 /**
  * Get the API key from environment variables
@@ -121,10 +137,25 @@ export async function generateImage(
  */
 export async function editImage(
   prompt: string,
-  imageBase64: string,
-  imageMimeType: string,
+  imagePath: string,
   model: string
 ): Promise<ImageGenerationResult> {
+  // Read image from filesystem
+  let imageBase64: string;
+  let imageMimeType: string;
+
+  try {
+    const imageBuffer = await readFile(imagePath);
+    imageBase64 = imageBuffer.toString("base64");
+    imageMimeType = getMimeTypeFromPath(imagePath);
+  } catch (err) {
+    return {
+      success: false,
+      error: `Failed to read image file: ${err instanceof Error ? err.message : String(err)}`,
+      model
+    };
+  }
+
   const request: GeminiRequest = {
     contents: [
       {

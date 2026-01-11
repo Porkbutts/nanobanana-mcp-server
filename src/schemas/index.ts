@@ -34,12 +34,9 @@ export const EditImageSchema = z.object({
     .min(1, "Prompt is required")
     .max(10000, "Prompt must not exceed 10000 characters")
     .describe("Text description of the edit to apply. Be specific about what to change, e.g., 'change the blue car to red' or 'add a sunset in the background'."),
-  image_base64: z.string()
-    .min(1, "Image data is required")
-    .describe("Base64-encoded image data to edit."),
-  image_mime_type: z.enum(["image/png", "image/jpeg", "image/webp", "image/gif"])
-    .default("image/png")
-    .describe("MIME type of the input image."),
+  image_path: z.string()
+    .min(1, "Image path is required")
+    .describe("File path to the image to edit. Supports PNG, JPEG, WebP, and GIF formats."),
   model: ModelSchema,
   output_path: z.string()
     .min(1, "Output path is required")

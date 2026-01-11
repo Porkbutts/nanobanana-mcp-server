@@ -148,8 +148,7 @@ This tool modifies images based on natural language instructions. You can:
 
 Args:
   - prompt (string): Description of the edit to apply
-  - image_base64 (string): Base64-encoded image data to edit
-  - image_mime_type (string): MIME type of input image (default: image/png)
+  - image_path (string): File path to the image to edit (PNG, JPEG, WebP, or GIF)
   - model (string): Gemini model to use
   - output_path (string): File path to save the edited image
 
@@ -172,8 +171,7 @@ Examples:
   async (params: EditImageInput) => {
     const result = await editImage(
       params.prompt,
-      params.image_base64,
-      params.image_mime_type,
+      params.image_path,
       params.model
     );
 
