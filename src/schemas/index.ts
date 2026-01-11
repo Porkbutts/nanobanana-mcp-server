@@ -22,8 +22,8 @@ export const GenerateImageSchema = z.object({
     .describe("Text description of the image to generate. Be specific about subject, style, lighting, composition, and mood for best results."),
   model: ModelSchema,
   output_path: z.string()
-    .optional()
-    .describe("Optional file path to save the generated image. If not provided, returns base64 data.")
+    .min(1, "Output path is required")
+    .describe("File path to save the generated image.")
 }).strict();
 
 export type GenerateImageInput = z.infer<typeof GenerateImageSchema>;
@@ -42,8 +42,8 @@ export const EditImageSchema = z.object({
     .describe("MIME type of the input image."),
   model: ModelSchema,
   output_path: z.string()
-    .optional()
-    .describe("Optional file path to save the edited image. If not provided, returns base64 data.")
+    .min(1, "Output path is required")
+    .describe("File path to save the edited image.")
 }).strict();
 
 export type EditImageInput = z.infer<typeof EditImageSchema>;

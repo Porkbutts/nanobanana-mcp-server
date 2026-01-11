@@ -47,19 +47,6 @@ async function saveImageToFile(
   await writeFile(outputPath, buffer);
 }
 
-/**
- * Get file extension from MIME type
- */
-function getExtensionFromMimeType(mimeType: string): string {
-  const extensions: Record<string, string> = {
-    "image/png": ".png",
-    "image/jpeg": ".jpg",
-    "image/webp": ".webp",
-    "image/gif": ".gif"
-  };
-  return extensions[mimeType] || ".png";
-}
-
 // Register: nanobanana_generate_image
 server.registerTool(
   "nanobanana_generate_image",
@@ -77,17 +64,10 @@ For best results, be specific about:
 Args:
   - prompt (string): Text description of the image to generate
   - model (string): Gemini model to use (default: gemini-2.0-flash-exp-image-generation)
-  - output_path (string, optional): File path to save the image
+  - output_path (string): File path to save the generated image
 
 Returns:
-  JSON object with:
-  - success (boolean): Whether generation succeeded
-  - image_base64 (string): Base64-encoded image data (if no output_path)
-  - saved_to (string): File path where image was saved (if output_path provided)
-  - mime_type (string): Image MIME type
-  - model (string): Model used for generation
-  - text (string, optional): Any text response from the model
-  - error (string, optional): Error message if generation failed
+  JSON with success, saved_to, mime_type, model, text
 
 Examples:
   - "A serene mountain lake at sunset with purple and orange sky reflections"
@@ -118,58 +98,38 @@ Examples:
       };
     }
 
-    // If output path provided, save the image
-    if (params.output_path) {
-      try {
-        await saveImageToFile(
-          result.image.data,
-          params.output_path,
-          result.image.mimeType
-        );
+    // Save the image to output path
+    try {
+      await saveImageToFile(
+        result.image.data,
+        params.output_path,
+        result.image.mimeType
+      );
 
-        const output = {
-          success: true,
-          saved_to: params.output_path,
-          mime_type: result.image.mimeType,
-          model: result.model,
-          text: result.text
-        };
-
-        return {
-          content: [{
-            type: "text",
-            text: JSON.stringify(output, null, 2)
-          }]
-        };
-      } catch (err) {
-        return {
-          content: [{
-            type: "text",
-            text: JSON.stringify({
-              success: false,
-              error: `Failed to save image: ${err instanceof Error ? err.message : String(err)}`,
-              model: result.model
-            }, null, 2)
-          }]
-        };
-      }
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify({
+            success: true,
+            saved_to: params.output_path,
+            mime_type: result.image.mimeType,
+            model: result.model,
+            text: result.text
+          }, null, 2)
+        }]
+      };
+    } catch (err) {
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify({
+            success: false,
+            error: `Failed to save image: ${err instanceof Error ? err.message : String(err)}`,
+            model: result.model
+          }, null, 2)
+        }]
+      };
     }
-
-    // Return base64 data
-    const output = {
-      success: true,
-      image_base64: result.image.data,
-      mime_type: result.image.mimeType,
-      model: result.model,
-      text: result.text
-    };
-
-    return {
-      content: [{
-        type: "text",
-        text: JSON.stringify(output, null, 2)
-      }]
-    };
   }
 );
 
@@ -191,17 +151,10 @@ Args:
   - image_base64 (string): Base64-encoded image data to edit
   - image_mime_type (string): MIME type of input image (default: image/png)
   - model (string): Gemini model to use
-  - output_path (string, optional): File path to save the edited image
+  - output_path (string): File path to save the edited image
 
 Returns:
-  JSON object with:
-  - success (boolean): Whether editing succeeded
-  - image_base64 (string): Base64-encoded edited image data (if no output_path)
-  - saved_to (string): File path where image was saved (if output_path provided)
-  - mime_type (string): Image MIME type
-  - model (string): Model used for editing
-  - text (string, optional): Any text response from the model
-  - error (string, optional): Error message if editing failed
+  JSON with success, saved_to, mime_type, model, text
 
 Examples:
   - "Change the car color from blue to red"
@@ -238,58 +191,38 @@ Examples:
       };
     }
 
-    // If output path provided, save the image
-    if (params.output_path) {
-      try {
-        await saveImageToFile(
-          result.image.data,
-          params.output_path,
-          result.image.mimeType
-        );
+    // Save the image to output path
+    try {
+      await saveImageToFile(
+        result.image.data,
+        params.output_path,
+        result.image.mimeType
+      );
 
-        const output = {
-          success: true,
-          saved_to: params.output_path,
-          mime_type: result.image.mimeType,
-          model: result.model,
-          text: result.text
-        };
-
-        return {
-          content: [{
-            type: "text",
-            text: JSON.stringify(output, null, 2)
-          }]
-        };
-      } catch (err) {
-        return {
-          content: [{
-            type: "text",
-            text: JSON.stringify({
-              success: false,
-              error: `Failed to save image: ${err instanceof Error ? err.message : String(err)}`,
-              model: result.model
-            }, null, 2)
-          }]
-        };
-      }
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify({
+            success: true,
+            saved_to: params.output_path,
+            mime_type: result.image.mimeType,
+            model: result.model,
+            text: result.text
+          }, null, 2)
+        }]
+      };
+    } catch (err) {
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify({
+            success: false,
+            error: `Failed to save image: ${err instanceof Error ? err.message : String(err)}`,
+            model: result.model
+          }, null, 2)
+        }]
+      };
     }
-
-    // Return base64 data
-    const output = {
-      success: true,
-      image_base64: result.image.data,
-      mime_type: result.image.mimeType,
-      model: result.model,
-      text: result.text
-    };
-
-    return {
-      content: [{
-        type: "text",
-        text: JSON.stringify(output, null, 2)
-      }]
-    };
   }
 );
 

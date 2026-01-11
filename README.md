@@ -54,8 +54,8 @@ Generate an image from a text prompt.
 
 **Parameters:**
 - `prompt` (required): Text description of the image to generate
+- `output_path` (required): File path to save the generated image
 - `model` (optional): Gemini model to use (default: `gemini-2.0-flash-exp-image-generation`)
-- `output_path` (optional): File path to save the generated image
 
 **Example:**
 ```
@@ -69,9 +69,9 @@ Edit an existing image using a text prompt.
 **Parameters:**
 - `prompt` (required): Description of the edit to apply
 - `image_base64` (required): Base64-encoded image data
+- `output_path` (required): File path to save the edited image
 - `image_mime_type` (optional): MIME type of input image (default: `image/png`)
 - `model` (optional): Gemini model to use
-- `output_path` (optional): File path to save the edited image
 
 **Example:**
 ```
