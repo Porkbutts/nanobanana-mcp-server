@@ -68,9 +68,8 @@ Edit an existing image using a text prompt.
 
 **Parameters:**
 - `prompt` (required): Description of the edit to apply
-- `image_base64` (required): Base64-encoded image data
+- `image_path` (required): File path to the image to edit (PNG, JPEG, WebP, or GIF)
 - `output_path` (required): File path to save the edited image
-- `image_mime_type` (optional): MIME type of input image (default: `image/png`)
 - `model` (optional): Gemini model to use
 
 **Example:**
