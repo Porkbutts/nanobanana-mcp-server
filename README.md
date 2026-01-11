@@ -1,5 +1,9 @@
 # Nanobanana MCP Server
 
+<p align="center">
+  <img src="robot_banana.png" alt="Robot Banana" width="300">
+</p>
+
 An MCP (Model Context Protocol) server for Google's Gemini image generation API. Generate and edit images using natural language prompts.
 
 ## Features
